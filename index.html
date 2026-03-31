@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="header-top">
+        <div class="brand">
+          <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M9 11l3 3L22 4"/>
+            <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+          </svg>
+          <h1>Todo</h1>
+        </div>
+        <div class="header-actions">
+          <button class="btn-icon" id="searchToggle" title="검색">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+          </button>
+          <button class="btn-icon" id="themeToggle" title="테마 전환">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"/>
+              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="search-bar" id="searchBar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input type="text" id="searchInput" placeholder="할 일 검색..." autocomplete="off">
+        <button class="btn-icon-sm" id="searchClear">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <span class="stat-num" id="statTotal">0</span>
+          <span class="stat-label">전체</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" id="statActive">0</span>
+          <span class="stat-label">진행 중</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" id="statDone">0</span>
+          <span class="stat-label">완료</span>
+        </div>
+        <div class="progress-ring">
+          <svg viewBox="0 0 36 36">
+            <circle class="ring-bg" cx="18" cy="18" r="15.9"/>
+            <circle class="ring-fill" id="progressRing" cx="18" cy="18" r="15.9"
+              stroke-dasharray="0 100" stroke-dashoffset="25"/>
+          </svg>
+          <span id="progressPct">0%</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="add-form">
+        <div class="add-input-row">
+          <input type="text" id="todoInput" class="todo-input" placeholder="새 할 일 추가..." autocomplete="off" maxlength="200">
+          <button class="btn-add" id="addBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
+          </button>
+        </div>
+        <div class="add-options">
+          <div class="option-group">
+            <label>우선순위</label>
+            <div class="priority-btns">
+              <button class="priority-btn active" data-priority="low">낮음</button>
+              <button class="priority-btn" data-priority="medium">중간</button>
+              <button class="priority-btn" data-priority="high">높음</button>
+            </div>
+          </div>
+          <div class="option-group">
+            <label>카테고리</label>
+            <select id="categorySelect" class="select">
+              <option value="">없음</option>
+              <option value="work">업무</option>
+              <option value="personal">개인</option>
+              <option value="shopping">쇼핑</option>
+              <option value="health">건강</option>
+              <option value="study">학습</option>
+            </select>
+          </div>
+          <div class="option-group">
+            <label>마감일</label>
+            <input type="date" id="dueDateInput" class="select">
+          </div>
+        </div>
+      </div>
+
+      <div class="filters">
+        <button class="filter-btn active" data-filter="all">전체</button>
+        <button class="filter-btn" data-filter="active">진행 중</button>
+        <button class="filter-btn" data-filter="completed">완료</button>
+        <div class="filter-right">
+          <select id="categoryFilter" class="select-sm">
+            <option value="">모든 카테고리</option>
+            <option value="work">업무</option>
+            <option value="personal">개인</option>
+            <option value="shopping">쇼핑</option>
+            <option value="health">건강</option>
+            <option value="study">학습</option>
+          </select>
+          <select id="sortSelect" class="select-sm">
+            <option value="created">최신순</option>
+            <option value="priority">우선순위</option>
+            <option value="due">마감일</option>
+            <option value="alpha">가나다순</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="todo-list" id="todoList">
+        <div class="empty-state" id="emptyState">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M9 11l3 3L22 4"/>
+            <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+          </svg>
+          <p>할 일이 없습니다</p>
+          <span>새 할 일을 추가해보세요!</span>
+        </div>
+      </div>
+
+      <div class="bulk-actions" id="bulkActions">
+        <button class="btn-text" id="clearCompleted">완료 항목 삭제</button>
+        <button class="btn-text" id="completeAll">모두 완료</button>
+      </div>
+    </main>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>할 일 수정</h3>
+        <button class="btn-icon" id="modalClose">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>할 일</label>
+          <input type="text" id="editInput" class="todo-input" maxlength="200">
+        </div>
+        <div class="form-group">
+          <label>우선순위</label>
+          <div class="priority-btns">
+            <button class="priority-btn" data-priority="low" data-edit>낮음</button>
+            <button class="priority-btn" data-priority="medium" data-edit>중간</button>
+            <button class="priority-btn" data-priority="high" data-edit>높음</button>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>카테고리</label>
+            <select id="editCategory" class="select">
+              <option value="">없음</option>
+              <option value="work">업무</option>
+              <option value="personal">개인</option>
+              <option value="shopping">쇼핑</option>
+              <option value="health">건강</option>
+              <option value="study">학습</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>마감일</label>
+            <input type="date" id="editDueDate" class="select">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>메모</label>
+          <textarea id="editNote" class="textarea" placeholder="메모를 입력하세요..." rows="3" maxlength="500"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="modalCancel">취소</button>
+        <button class="btn-primary" id="modalSave">저장</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
